@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>CryptoFollower</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+        <a class="navbar-brand" href="/">CryptoFollower</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    <div class="background-image">
+        
+    </div>
+    <div class="triangle"></div>
+    <div class="container main">
+        {% if data is not defined %}
+        <div class="welcoming">
+            <h1 class="welcome">Welcome to CryptoFollower</h1>
+            <p class="subwelcome">Find blogs or news about cryptocurrency!</p>
+            <p class="maintext">Please, go below and input your cryptocurrency's name.</p>
+        </div>
+        <div class="selects">
+
+            <form class="row g-3" method="POST"  action="/find" id="input_side">
+                <div class="col-auto">
+                  <input class="form-control" type="text" name="name" id="name" placeholder="Enter coin..." value={{name}} >
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" type="text" name="token" id="token" placeholder="Enter your token..." required>
+                  </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary mb-3">Search</button>
+                </div>
+              </form>
+            <a href="/db" style="margin-top:20px ;">Database</a>
+        </div>
+        {% if articles is defined %}
+        <h1 style="margin-bottom: 20px;">We have found articles for <i>{{name}}:</i></h1>
+            {% set count = 1 %}
+            <ol>
+            {% for article in articles %}
+                <li style="margin-bottom: 10px;"><a href="{{article.url}}"> {{article.url}}</a><p>{{article.summary}}</p></li>
+            {% endfor%}
+            </ol>
+        {% endif %}
+        {% else%}
+        {% if num_rows_deleted is defined%}
+        <h2 style="color: yellowgreen;">{{num_rows_deleted}} rows successfully deleted from DataBase</h2>
+        {% endif%}
+        <h3><a href="/db_delete_all">Delete all rows</a></h3>
+        <table style="color: black;">
+            <tr>
+              <th>ID</th>
+              <th>coin</th>
+              <th>URL</th>
+              <th>Summary</th>
+            </tr>
+            {% if data!=None%}
+            {% for article in data %}
+            <tr>
+              <td>{{article.id}}</td>
+              <td>{{article.coin}}</td>
+              <td style="font-size: 12px;"><a href="{{article.url}}">{{article.url}}</a></td>
+              <td>{{article.summary}}</td>
+              
+            </tr>
+            {% endfor%}
+            {%endif%}
+            <tr>
+          </table>
+        {% endif %}
+    </div>
+
+<script src="{{url_for('static', filename='scripts/script.js')}}"></script>
+</body>
+</html>
